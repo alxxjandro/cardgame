@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 
-function Game({difficulty}){
+function Game({difficulty}){ 
 
   useEffect(() => {
     const loadCharacters = async () => {

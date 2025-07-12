@@ -1,4 +1,3 @@
-
 function Card({ name, image, onClick }) {
   return (
     <div onClick={() => onClick(name)}>
