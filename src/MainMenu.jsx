@@ -1,5 +1,4 @@
-function Menu({ setDifficulty, difficulty, options}) {
-
+function Menu({ setDifficulty, difficulty, options }) {
   return (
     <div className="max-w-md w-full bg-slate-950 rounded-xl shadow-2xl p-8 flex flex-col items-center gap-6 border border-lime-500">
       <h1 className="text-3xl font-extrabold text-lime-200 text-center leading-snug drop-shadow-[0_0_6px_#84cc16]">

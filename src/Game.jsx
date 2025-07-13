@@ -4,6 +4,8 @@ import Card from "./Card";
 function Game({ difficulty }) {
   const [characters, setCharacters] = useState([]);
   const [cards, setCards] = useState([]);
+  const [clickedCards, setClickedCards] = useState([]);
+  const [ids, setIds] = useState([]);
 
   useEffect(() => {
     const loadCharacters = async () => {
@@ -14,10 +16,13 @@ function Game({ difficulty }) {
           "https://rickandmortyapi.com/api/character?page=3",
         ];
 
-        const responses = await Promise.all(urls.map(url => fetch(url)));
-        const arrays = await Promise.all(responses.map(res => res.json()));
+        const responses = await Promise.all(urls.map((url) => fetch(url)));
+        const arrays = await Promise.all(responses.map((res) => res.json()));
 
-        const data = arrays[0].results.concat(arrays[1].results,arrays[2].results);
+        const data = arrays[0].results.concat(
+          arrays[1].results,
+          arrays[2].results,
+        );
         setCharacters(data);
       } catch (e) {
         console.error("An error occurred: ", e);
@@ -26,45 +31,80 @@ function Game({ difficulty }) {
     loadCharacters();
   }, []);
 
+  //once we fetch all the characters, get
+  //the ones we are going to be playing with
   useEffect(() => {
     if (characters.length > 0) {
-      setCards(loadCards(difficulty));
+      let values = [];
+
+      for (let i = 0; i < difficulty.clicks; i++) {
+        let id = Math.floor(Math.random() * 60);
+        while (values.includes(id)) {
+          id = Math.floor(Math.random() * 60);
+        }
+        values.push(id);
+      }
+      setIds(values);
     }
   }, [characters, difficulty]);
 
-  function loadCards(difficulty) {
-    if (!characters || characters.length === 0) return null;
+  //once we have the id's, start the game
+  useEffect(() => {
+    if (ids.length > 0) {
+      getRandomCards();
+    }
+  }, [ids]);
 
-    const cards = [];
-    const ids = [];
-    for (let i = 0; i < difficulty.cards; i++) {
+  useEffect(() => {
+    console.log(clickedCards);
+    getRandomCards();
+  }, [clickedCards]);
 
+  function getRandomCards() {
+    const notClicked = ids.filter((id) => !clickedCards.includes(id));
+    if (notClicked.length === 0) return;
+    const mustInclude =
+      notClicked[Math.floor(Math.random() * notClicked.length)];
 
-      let char = characters[Math.floor(Math.random() * 60)];
-      while(ids.includes(char.id)){
-        char = characters[Math.floor(Math.random() * 60)];
-      }
+    //pick clikc-1 cards and ensure at least one that hasn't been clicked shows up
+    const random = [...ids]
+      .filter((id) => id !== mustInclude)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, difficulty.cards - 1);
 
-      cards.push(
+    const final = [...random, mustInclude].sort(() => Math.random() - 0.5);
+
+    const newCards = final.map((id) => {
+      const char = characters[id];
+      return (
         <Card
           key={char.id}
           name={char.name}
           image={char.image}
-          onClick={() => console.log("Clicked", char.name)}
+          onClick={() => checkGameStatus(id)}
         />
       );
-      ids.push(char.id)
+    });
 
-
-    }
-    return cards;
+    setCards(newCards);
   }
 
-  return (
-    <div className="flex flex-wrap justify-center gap-4 p-4">
-      {cards}
-    </div>
-  );
+  function checkGameStatus(id) {
+    //check for a double click
+    if (clickedCards.includes(id)) {
+      alert("Sorry, you lose!");
+    }
+
+    //check if that was the last card
+    if (clickedCards.length + 1 === difficulty.clicks) {
+      alert("Congrats!, you win!");
+    }
+
+    //if the player hasn't lose/won, keep playing
+    setClickedCards((prev) => [...prev, id]);
+  }
+
+  return <div className="flex flex-wrap justify-center gap-4 p-4">{cards}</div>;
 }
 
 export default Game;
