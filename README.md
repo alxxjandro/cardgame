@@ -4,6 +4,6 @@ This project is a React-based card game inspired by [The Odin Project](https://w
 
 ## Features
 
-- Built with React
+- Built with React and Tailwind
 - Rick & Morty themed cards
 - Interactive and engaging gameplay
