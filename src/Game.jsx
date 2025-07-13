@@ -104,7 +104,23 @@ function Game({ difficulty }) {
     setClickedCards((prev) => [...prev, id]);
   }
 
-  return <div className="flex flex-wrap justify-center gap-4 p-4">{cards}</div>;
+  return (
+    <div className="flex flex-col items-center min-h-screen w-screen px-4 ">
+      <div className="py-4 flex justify-center text-lime-200 text-xl sm:text-2xl font-semibold drop-shadow-[0_0_20px_#a3e635]">
+        {"Score: " + clickedCards.length + " / " + difficulty.clicks}
+      </div>
+
+      <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-lime-300 drop-shadow-[0_0_20px_#a3e635] pb-6 px-2">
+        Click all characters without repeating to win!
+      </h1>
+
+      <div className="flex-1 flex items-center">
+        <div className="w-full max-w-6xl flex flex-wrap justify-center gap-2 pb-6">
+          {cards}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Game;

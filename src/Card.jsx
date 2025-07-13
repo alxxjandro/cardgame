@@ -1,8 +1,12 @@
 function Card({ name, image, onClick }) {
   return (
-    <div onClick={() => onClick(name)}>
+    <div className="w-36 sm:w-40 md:w-48 lg:w-56" onClick={() => onClick(name)}>
       {/* <h1>{name}</h1> */}
-      <img src={image} alt={name + " image"} />
+      <img
+        className="rounded-2xl shadow-5xl"
+        src={image}
+        alt={name + " image"}
+      />
     </div>
   );
 }
