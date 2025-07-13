@@ -113,7 +113,7 @@ function Game({ difficulty, onGoToMenu }) {
       <div className="text-3xl font-bold text-slate-50">
         {gameStatus === "lose" ? (
           <div className="flex flex-col items-center gap-5">
-            <h1>Sorry, you lose! wanna try again?</h1>
+            <h1 className="text-center">Sorry, you lose! wanna try again?</h1>
             <button
               onClick={() => restartGame()}
               className="text-2xl px-6 py-2 cursor-pointer rounded-full text-md border-2 bg-lime-300 border-lime-300 text-slate-900 hover:bg-slate-900 hover:text-lime-300 transition-all ease-in duration-150 shadow-md hover:shadow-lime-400"
@@ -122,7 +122,7 @@ function Game({ difficulty, onGoToMenu }) {
             </button>
           </div>
         ) : gameStatus === "win" ? (
-          <div className="flex flex-col items-center gap-5">
+          <div className="text-center flex flex-col items-center gap-5">
             <h1>Congrats, you win!</h1>
             <button
               onClick={() => onGoToMenu()}
