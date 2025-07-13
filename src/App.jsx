@@ -1,13 +1,13 @@
-import { useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import Card from "./Card";
 import Menu from "./MainMenu";
 import Game from "./Game";
 import bg from "./assets/bg.jpg";
 
 function App() {
+  const [screen, setScreen] = useState("menu"); // "menu" | "game"
   const [difficulty, setDifficulty] = useState(null);
-  const [playerName, setPlayerName] = useState("");
-  const [click, setClick] = useState("");
+
   const options = [
     {
       difficulty: "Easy",
@@ -26,6 +26,16 @@ function App() {
     },
   ];
 
+  function handleStart(selectedDifficulty) {
+    setDifficulty(selectedDifficulty);
+    setScreen("game");
+  }
+
+  function handleGoToMenu() {
+    setDifficulty(null);
+    setScreen("menu");
+  }
+
   return (
     <div
       className="min-h-screen min-w-screen bg-cover bg-center flex justify-center items-center relative"
@@ -33,10 +43,18 @@ function App() {
     >
       <div className="absolute inset-0 bg-[rgba(0,0,0,0.7)] z-0" />
       <div className="z-10">
-        {!difficulty && (
-          <Menu setDifficulty={setDifficulty} options={options} />
+        {screen === "menu" && (
+          <Menu
+            setDifficulty={handleStart}
+            options={options}
+          />
         )}
-        {difficulty && <Game difficulty={difficulty} />}
+        {screen === "game" && (
+          <Game
+            difficulty={difficulty}
+            onGoToMenu={handleGoToMenu}
+          />
+        )}
       </div>
     </div>
   );
