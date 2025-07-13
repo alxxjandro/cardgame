@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Card from "./Card";
 import Menu from "./MainMenu";
 import Game from "./Game";
@@ -6,6 +6,7 @@ import bg from "./assets/bg.jpg";
 
 function App() {
   const [difficulty, setDifficulty] = useState(null);
+  const [playerName, setPlayerName] = useState("");
   const [click, setClick] = useState("");
   const options = [
     {

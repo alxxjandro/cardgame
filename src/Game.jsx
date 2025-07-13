@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Card from "./Card";
 
 function Game({ difficulty }) {
+  const [gameStatus, setGameStatus] = useState();
   const [characters, setCharacters] = useState([]);
   const [cards, setCards] = useState([]);
   const [clickedCards, setClickedCards] = useState([]);
@@ -51,12 +52,13 @@ function Game({ difficulty }) {
   //once we have the id's, start the game
   useEffect(() => {
     if (ids.length > 0) {
+      setGameStatus("playing");
       getRandomCards();
     }
   }, [ids]);
 
+  //changing the cards every click
   useEffect(() => {
-    console.log(clickedCards);
     getRandomCards();
   }, [clickedCards]);
 
@@ -92,33 +94,73 @@ function Game({ difficulty }) {
   function checkGameStatus(id) {
     //check for a double click
     if (clickedCards.includes(id)) {
-      alert("Sorry, you lose!");
+      setGameStatus("lose");
     }
 
     //check if that was the last card
     if (clickedCards.length + 1 === difficulty.clicks) {
-      alert("Congrats!, you win!");
+      setGameStatus("win");
     }
 
     //if the player hasn't lose/won, keep playing
     setClickedCards((prev) => [...prev, id]);
   }
 
+  function FinalScreen() {
+    return (
+      <div className="text-3xl font-bold text-slate-50">
+        {gameStatus === "lose" ? (
+          <div className="flex flex-col items-center gap-5">
+            <h1>Sorry, you lose! wanna try again?</h1>
+            <button
+              onClick={() => restartGame()}
+              className="text-2xl px-6 py-2 cursor-pointer rounded-full text-md border-2 bg-lime-300 border-lime-300 text-slate-900 hover:bg-slate-900 hover:text-lime-300 transition-all ease-in duration-150 shadow-md hover:shadow-lime-400"
+            >
+              Play again
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-5">
+            <h1>Congrats, you win!</h1>
+            <button
+              onClick={() => restartGame()}
+              className="text-2xl px-6 py-2 cursor-pointer rounded-full text-md border-2 bg-lime-300 border-lime-300 text-slate-900 hover:bg-slate-900 hover:text-lime-300 transition-all ease-in duration-150 shadow-md hover:shadow-lime-400"
+            >
+              Go to main menu
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function restartGame() {
+    gameStatus === "lose"
+      ? console.log("Re-starting the game")
+      : console.log("goint to the main menu");
+  }
+
   return (
-    <div className="flex flex-col items-center min-h-screen w-screen px-4 ">
-      <div className="py-4 flex justify-center text-lime-200 text-xl sm:text-2xl font-semibold drop-shadow-[0_0_20px_#a3e635]">
-        {"Score: " + clickedCards.length + " / " + difficulty.clicks}
-      </div>
+    <div>
+      {gameStatus === "playing" ? (
+        <div className="flex flex-col items-center min-h-screen w-screen px-4">
+          <div className="py-4 flex justify-center text-lime-200 text-xl sm:text-2xl font-semibold drop-shadow-[0_0_20px_#a3e635]">
+            {"Score: " + clickedCards.length + " / " + difficulty.clicks}
+          </div>
 
-      <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-lime-300 drop-shadow-[0_0_20px_#a3e635] pb-6 px-2">
-        Click all characters without repeating to win!
-      </h1>
+          <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-lime-300 drop-shadow-[0_0_20px_#a3e635] pb-6 px-2">
+            Click all characters without repeating to win!
+          </h1>
 
-      <div className="flex-1 flex items-center">
-        <div className="w-full max-w-6xl flex flex-wrap justify-center gap-2 pb-6">
-          {cards}
+          <div className="flex-1 flex items-center">
+            <div className="w-full max-w-6xl flex flex-wrap justify-center gap-2 pb-6">
+              {cards}
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <FinalScreen />
+      )}
     </div>
   );
 }
