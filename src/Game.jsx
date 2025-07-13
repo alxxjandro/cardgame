@@ -94,7 +94,6 @@ function Game({ difficulty, onGoToMenu }) {
   }
 
   function checkGameStatus(id) {
-
     //check for a double click
     if (clickedCards.includes(id)) {
       setGameStatus("lose");
@@ -132,34 +131,49 @@ function Game({ difficulty, onGoToMenu }) {
               Go to main menu
             </button>
           </div>
-        ) : ""}
+        ) : (
+          ""
+        )}
       </div>
     );
   }
 
-function restartGame() {
-  if (clickedCards.length > highScore){
-    setHighScore(gameStatus === "win" ? clickedCards.length : clickedCards.length - 1);
+  function restartGame() {
+    if (clickedCards.length > highScore) {
+      setHighScore(
+        gameStatus === "win" ? clickedCards.length : clickedCards.length - 1,
+      );
+    }
+
+    setGameStatus("playing");
+    setCards([]);
+    setClickedCards([]);
+    setIds([]);
+    setRound((prev) => prev + 1);
   }
-
-  setGameStatus("playing");
-  setCards([]);
-  setClickedCards([]);
-  setIds([]);
-  setRound(prev => prev + 1);
-
-}
 
   return (
     <div>
       {gameStatus === "playing" ? (
         <div className="flex flex-col items-center min-h-screen w-screen px-4">
-
           <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-lime-300 drop-shadow-[0_0_20px_#a3e635] pt-10 px-2">
             Click all characters without repeating to win!
           </h1>
           <div className="pt-4 flex flex-col justify-center text-lime-200 text-xl sm:text-2xl font-semibold drop-shadow-[0_0_20px_#a3e635]">
-            <h1> {highScore > 0 ? ("Score: " + clickedCards.length + " / " + difficulty.clicks) + " • " + ("High Score: " + highScore) : ("Score: " + clickedCards.length + " / " + difficulty.clicks)} </h1>
+            <h1>
+              {" "}
+              {highScore > 0
+                ? "Score: " +
+                  clickedCards.length +
+                  " / " +
+                  difficulty.clicks +
+                  " • " +
+                  ("High Score: " + highScore)
+                : "Score: " +
+                  clickedCards.length +
+                  " / " +
+                  difficulty.clicks}{" "}
+            </h1>
           </div>
 
           <div className="flex-1 flex items-center">

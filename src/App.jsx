@@ -44,16 +44,10 @@ function App() {
       <div className="absolute inset-0 bg-[rgba(0,0,0,0.7)] z-0" />
       <div className="z-10">
         {screen === "menu" && (
-          <Menu
-            setDifficulty={handleStart}
-            options={options}
-          />
+          <Menu setDifficulty={handleStart} options={options} />
         )}
         {screen === "game" && (
-          <Game
-            difficulty={difficulty}
-            onGoToMenu={handleGoToMenu}
-          />
+          <Game difficulty={difficulty} onGoToMenu={handleGoToMenu} />
         )}
       </div>
     </div>
